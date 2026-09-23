@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML 리포트 허브</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Remixicon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 메인 헤더 -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo">
+        <i class="ri-article-line"></i>
+        <span>ReportHub</span>
+      </div>
+      <!--<button class="btn btn-primary" id="openModalBtn">
+        <i class="ri-upload-cloud-2-line"></i> 리포트 업로드
+      </button>-->
+    </div>
+  </header>
+
+  <!-- 메인 컨테이너 -->
+  <main class="container">
+    <!-- 검색 및 필터 바 -->
+    <section class="toolbar">
+      <div class="search-box">
+        <i class="ri-search-line"></i>
+        <input type="text" id="searchInput" placeholder="리포트 제목 또는 작성자 검색...">
+      </div>
+      <div class="stats" id="reportCount">총 0개의 리포트</div>
+    </section>
+
+    <!-- 리포트 카드 목록 -->
+    <section class="report-grid" id="reportGrid"></section>
+  </main>
+
+  <!-- 업로드 모달 -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>새 HTML 리포트 업로드</h3>
+        <button class="close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <form id="uploadForm">
+        <div class="form-group">
+          <label for="title">리포트 제목</label>
+          <input type="text" id="title" placeholder="예: 2026년 3분기 인프라 점검 보고서" required>
+        </div>
+        <div class="form-group">
+          <label for="author">작성자</label>
+          <input type="text" id="author" placeholder="작성자 이름" required>
+        </div>
+        <div class="form-group">
+          <label for="description">설명 (선택)</label>
+          <textarea id="description" rows="3" placeholder="리포트에 대한 간단한 설명을 입력하세요."></textarea>
+        </div>
+        <div class="form-group">
+          <label>HTML 파일 선택</label>
+          <div class="file-drop-zone" id="dropZone">
+            <i class="ri-file-code-line"></i>
+            <p>HTML 파일을 클릭하여 선택하거나 여기로 드래그하세요</p>
+            <span class="file-name" id="fileNameDisplay">선택된 파일 없음</span>
+            <input type="file" id="htmlFile" accept=".html,.htm" required hidden>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
+          <button type="submit" class="btn btn-primary">등록하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 리포트 뷰어 모달 -->
+  <div class="modal-backdrop viewer-backdrop" id="viewerModal">
+    <div class="viewer-container">
+      <div class="viewer-header">
+        <div class="viewer-title-info">
+          <h3 id="viewerTitle">리포트 제목</h3>
+          <span class="viewer-meta" id="viewerMeta">작성자 | 날짜</span>
+        </div>
+        <div class="viewer-actions">
+          <button class="btn btn-outline" id="newTabBtn"><i class="ri-open-with-line"></i> 새 창으로 보기</button>
+          <button class="close-btn" id="closeViewerBtn">&times;</button>
+        </div>
+      </div>
+      <div class="viewer-body">
+        <iframe id="reportIframe" title="Report Viewer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

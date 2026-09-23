@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026년 3분기 인프라 점검 및 AI 전환 검토 보고서</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #e0e7ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    .report-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .meta { font-size: 0.875rem; color: var(--text-muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .card-title { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .card-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.25rem; }
+    .status-good { color: var(--success); }
+    .status-warn { color: var(--warning); }
+
+    .section { margin-bottom: 2rem; }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    th, td {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    th { background: #f1f5f9; font-weight: 600; color: #475569; }
+
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="report-container">
+    <header class="header">
+      <span class="badge">정기 인프라 보고서</span>
+      <h1>2026년 3분기 인프라 점검 및 AI 전환 검토</h1>
+      <div class="meta">
+        작성자: <strong>IT 시스템 관리팀</strong> | 작성일자: 2026-09-23 | 대상: 전체 시스템
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">서버 전체 가동률</div>
+        <div class="card-value status-good">99.98%</div>
+      </div>
+      <div class="card">
+        <div class="card-title">평균 응답 속도</div>
+        <div class="card-value">124ms</div>
+      </div>
+      <div class="card">
+        <div class="card-title">월간 데이터 수정 요청</div>
+        <div class="card-value status-warn">142건</div>
+      </div>
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">1. 시스템 가동 현황</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>점검 항목</th>
+            <th>상태</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>그룹웨어 / 포털</td>
+            <td>레거시 포털(iKEP4) 성능 및 응답 속도</td>
+            <td><span class="status-warn">경고</span></td>
+            <td>사용자 증가로 인한 대기열 발생</td>
+          </tr>
+          <tr>
+            <td>전자결재</td>
+            <td>결재 데이터 변경 및 수정 요청 건수</td>
+            <td><span class="status-warn">주의</span></td>
+            <td>입력 오기 및 정책 변경 건 다수</td>
+          </tr>
+          <tr>
+            <td>웹 메일 서버</td>
+            <td>스팸 필터링 및 디스크 용량</td>
+            <td><span class="status-good">양호</span></td>
+            <td>여유 용량 42% 확보</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">2. 레거시 포털 개선 및 AI 연동 계획</h2>
+      <div class="callout">
+        <strong>주요 추진 방향:</strong> 기존 레거시 시스템의 한계를 극복하기 위해 **AI 기반 자동화** 및 **RAG(검색 증강 생성)** 모델을 도입하여 전자결재 및 사내 포털 검색 속도를 개선할 예정임.
+      </div>
+    </section>
+
+    <footer>
+      본 보고서는 사내 보안 문서이므로 무단 배포를 금합니다. &copy; 2026 Corp Infrastructure Team.
+    </footer>
+  </div>
+
+</body>
+</html>
