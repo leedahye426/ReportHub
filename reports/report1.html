@@ -3,18 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026년 3분기 인프라 점검 및 AI 전환 검토 보고서</title>
+  <title>2026 Q3 Enterprise Infrastructure & AI Transformation Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
       --primary: #4f46e5;
-      --primary-light: #e0e7ff;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --primary-light: #eef2ff;
+      --accent: #06b6d4;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
       --success: #10b981;
       --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 14px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,107 +29,88 @@
       background-color: var(--bg);
       color: var(--text);
       padding: 2rem;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .report-container {
-      max-width: 900px;
+      max-width: 1150px;
       margin: 0 auto;
-      background: var(--surface);
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2.5rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
 
     .header {
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--primary-light);
-      color: var(--primary);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      margin-bottom: 0.5rem;
-    }
-
-    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .meta { font-size: 0.875rem; color: var(--text-muted); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-
-    .card-title { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-    .card-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.25rem; }
-    .status-good { color: var(--success); }
-    .status-warn { color: var(--warning); }
-
-    .section { margin-bottom: 2rem; }
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .section-title::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 18px;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.5rem;
-    }
-
-    th, td {
-      padding: 0.8rem 1rem;
-      text-align: left;
+      justify-content: space-between;
+      align-items: flex-start;
       border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
+      padding-bottom: 1.75rem;
+      margin-bottom: 2rem;
     }
 
-    th { background: #f1f5f9; font-weight: 600; color: #475569; }
-
-    .callout {
-      background: #eff6ff;
-      border-left: 4px solid var(--primary);
-      padding: 1rem 1.25rem;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.92rem;
+    .badge-group { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 20px;
     }
+    .badge-primary { background: rgba(79, 70, 229, 0.2); color: #818cf8; border: 1px solid rgba(129, 140, 248, 0.3); }
+    .badge-accent { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.3); }
+
+    h1 { font-size: 2rem; font-weight: 800; color: #ffffff; }
+    .meta { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.4rem; }
+
+    .action-btn {
+      background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+      padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.25rem; position: relative; overflow: hidden;
+    }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+    .kpi-card.warning::before { background: var(--warning); }
+    .kpi-card.accent::before { background: var(--accent); }
+
+    .kpi-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .kpi-value { font-size: 1.8rem; font-weight: 800; margin: 0.4rem 0 0.2rem 0; color: #ffffff; }
+    .kpi-sub { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 0.25rem; }
+    .text-success { color: var(--success); }
+    .text-warning { color: var(--warning); }
+
+    .dash-grid {
+      display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .panel-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.25rem; color: #ffffff; }
+
+    .roadmap { display: flex; flex-direction: column; gap: 1rem; }
+    .roadmap-step { display: flex; gap: 1rem; align-items: flex-start; padding-bottom: 0.8rem; border-bottom: 1px dashed var(--border); }
+    .roadmap-step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-tag { background: var(--primary); color: #fff; font-size: 0.7rem; font-weight: 800; padding: 0.2rem 0.5rem; border-radius: 6px; }
+    .step-content h4 { font-size: 0.9rem; color: #f8fafc; font-weight: 600; }
+    .step-content p { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    th { background: rgba(15, 23, 42, 0.6); color: var(--text-muted); font-weight: 600; }
+
+    .status-chip { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 10px; font-weight: 700; display: inline-block; }
+    .chip-stable { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .chip-review { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .chip-migrating { background: rgba(6, 182, 212, 0.15); color: #38bdf8; }
 
     footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);
     }
   </style>
 </head>
@@ -131,73 +118,153 @@
 
   <div class="report-container">
     <header class="header">
-      <span class="badge">정기 인프라 보고서</span>
-      <h1>2026년 3분기 인프라 점검 및 AI 전환 검토</h1>
-      <div class="meta">
-        작성자: <strong>IT 시스템 관리팀</strong> | 작성일자: 2026-09-23 | 대상: 전체 시스템
+      <div>
+        <div class="badge-group">
+          <span class="badge badge-primary"><i class="ri-server-line"></i> INFRASTRUCTURE</span>
+          <span class="badge badge-accent"><i class="ri-cpu-line"></i> AI INTEGRATION</span>
+        </div>
+        <h1>2026 Q3 인프라 점검 및 AI 전환 로드맵 보고서</h1>
+        <div class="meta">분석 기준: <strong>2026년 3분기 데이터</strong> | 작성: <strong>기술전략팀 샘플</strong></div>
       </div>
+      <button class="action-btn" onclick="window.print()"><i class="ri-printer-line"></i> 리포트 출력</button>
     </header>
 
-    <div class="grid">
-      <div class="card">
-        <div class="card-title">서버 전체 가동률</div>
-        <div class="card-value status-good">99.98%</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">코어 시스템 가동률</div>
+        <div class="kpi-value">99.97%</div>
+        <div class="kpi-sub text-success"><i class="ri-arrow-up-s-line"></i> SLA 목표 (99.9%) 달성</div>
       </div>
-      <div class="card">
-        <div class="card-title">평균 응답 속도</div>
-        <div class="card-value">124ms</div>
+      <div class="kpi-card warning">
+        <div class="kpi-title">트래픽 처리 평균 지연</div>
+        <div class="kpi-value">184ms</div>
+        <div class="kpi-sub text-warning"><i class="ri-alert-line"></i> 피크 타임 대기열 발생</div>
       </div>
-      <div class="card">
-        <div class="card-title">월간 데이터 수정 요청</div>
-        <div class="card-value status-warn">142건</div>
+      <div class="kpi-card accent">
+        <div class="kpi-title">AI RAG 검색 정확도</div>
+        <div class="kpi-value">92.4%</div>
+        <div class="kpi-sub text-success"><i class="ri-flashlight-line"></i> PoC 테스트 결과 반영</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">월간 데이터 자동화율</div>
+        <div class="kpi-value">68.5%</div>
+        <div class="kpi-sub text-success"><i class="ri-arrow-up-s-line"></i> 전분기 대비 +14.2%</div>
       </div>
     </div>
 
-    <section class="section">
-      <h2 class="section-title">1. 시스템 가동 현황</h2>
+    <div class="dash-grid">
+      <div class="panel">
+        <div class="panel-title"><i class="ri-line-chart-line" style="color: var(--accent);"></i> 워크로드 및 AI 처리율 추이</div>
+        <canvas id="infraChart" height="170"></canvas>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="ri-node-tree" style="color: var(--primary);"></i> AI 전환 Phase 로드맵</div>
+        <div class="roadmap">
+          <div class="roadmap-step">
+            <span class="step-tag">Phase 1</span>
+            <div class="step-content">
+              <h4>사내 지식베이스 RAG 구축</h4>
+              <p>기존 문서 및 데이터베이스 인덱싱 (완료)</p>
+            </div>
+          </div>
+          <div class="roadmap-step">
+            <span class="step-tag" style="background: var(--accent);">Phase 2</span>
+            <div class="step-content">
+              <h4>지능형 워크플로우 자동화</h4>
+              <p>반복 데이터 수정 패턴 감지 및 자동 처리 (진행중)</p>
+            </div>
+          </div>
+          <div class="roadmap-step">
+            <span class="step-tag" style="background: var(--border); color: var(--text-muted);">Phase 3</span>
+            <div class="step-content">
+              <h4>차세대 AI-Native 통합 업무 환경</h4>
+              <p>LLM 에이전트 기반 어시스턴트 적용 (예정)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><i class="ri-database-2-line" style="color: var(--success);"></i> 주요 모듈별 상태 및 전환 목표</div>
       <table>
         <thead>
           <tr>
-            <th>구분</th>
-            <th>점검 항목</th>
-            <th>상태</th>
-            <th>비고</th>
+            <th>모듈 / 서브시스템</th>
+            <th>현재 상태</th>
+            <th>주요 이슈 / 병목 원인</th>
+            <th>AI 도입 및 개선 방향</th>
+            <th>전환 상태</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>그룹웨어 / 포털</td>
-            <td>레거시 포털(iKEP4) 성능 및 응답 속도</td>
-            <td><span class="status-warn">경고</span></td>
-            <td>사용자 증가로 인한 대기열 발생</td>
+            <td><strong>통합 워크스페이스</strong></td>
+            <td>리소시스 한계</td>
+            <td>모바일 응답 지연 및 UX 개선 필요</td>
+            <td>클라우드 네이티브 UI / AI 통합 검색 적용</td>
+            <td><span class="status-chip chip-migrating">타겟 전환중</span></td>
           </tr>
           <tr>
-            <td>전자결재</td>
-            <td>결재 데이터 변경 및 수정 요청 건수</td>
-            <td><span class="status-warn">주의</span></td>
-            <td>입력 오기 및 정책 변경 건 다수</td>
+            <td><strong>전자결재 시스템</strong></td>
+            <td>정상 가동</td>
+            <td>수동 양식 수정 및 반복 오기입 발생</td>
+            <td>LLM 기반 서식 필드 자동 검증 도입</td>
+            <td><span class="status-chip chip-review">검토 완료</span></td>
           </tr>
           <tr>
-            <td>웹 메일 서버</td>
-            <td>스팸 필터링 및 디스크 용량</td>
-            <td><span class="status-good">양호</span></td>
-            <td>여유 용량 42% 확보</td>
+            <td><strong>메일 서버 인프라</strong></td>
+            <td>안정적</td>
+            <td>스팸/피싱 보안 위협 고도화</td>
+            <td>AI 딥러닝 패턴 분석 보안 필터 적용</td>
+            <td><span class="status-chip chip-stable">운영 중</span></td>
           </tr>
         </tbody>
       </table>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">2. 레거시 포털 개선 및 AI 연동 계획</h2>
-      <div class="callout">
-        <strong>주요 추진 방향:</strong> 기존 레거시 시스템의 한계를 극복하기 위해 **AI 기반 자동화** 및 **RAG(검색 증강 생성)** 모델을 도입하여 전자결재 및 사내 포털 검색 속도를 개선할 예정임.
-      </div>
-    </section>
+    </div>
 
     <footer>
-      본 보고서는 사내 보안 문서이므로 무단 배포를 금합니다. &copy; 2026 Corp Infrastructure Team.
+      <span><i class="ri-lock-2-line"></i> Enterprise Technology Strategy Dashboard</span>
+      <span>2026.09.23 Generated</span>
     </footer>
   </div>
+
+  <script>
+    const ctx = document.getElementById('infraChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['5월', '6월', '7월', '8월', '9월', '10월 (예상)'],
+        datasets: [
+          {
+            label: '서버 평균 부하율 (%)',
+            data: [78, 82, 85, 89, 91, 75],
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: 'AI 자동화 처리 비중 (%)',
+            data: [12, 20, 35, 48, 68, 85],
+            borderColor: '#06b6d4',
+            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+          y: { beginAtZero: true, max: 100, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>

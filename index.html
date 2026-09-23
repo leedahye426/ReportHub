@@ -3,97 +3,360 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML 리포트 허브</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Remixicon -->
+  <title>엔터프라이즈 리포트 센터</title>
+  <!-- Remix Icon (아이콘용 CDN) -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <style>
+    /* ==========================================
+       1. 기본 스타일 및 변수 설정
+       ========================================== */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Report Card Grid */
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .report-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .report-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-view {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background-color 0.2s;
+    }
+
+    .btn-view:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .error-msg {
+      grid-column: 1 / -1;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* ==========================================
+       2. 모달(팝업) 레이아웃 & X 버튼 스타일
+       ========================================== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 1200px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background-color: #0f172a;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .btn-newtab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-newtab:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-close:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .modal-body {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- 메인 헤더 -->
-  <header class="header">
-    <div class="header-container">
-      <div class="logo">
-        <i class="ri-article-line"></i>
-        <span>ReportHub</span>
-      </div>
-      <!--<button class="btn btn-primary" id="openModalBtn">
-        <i class="ri-upload-cloud-2-line"></i> 리포트 업로드
-      </button>-->
+  <div class="container">
+    <header>
+      <h1><i class="ri-dashboard-3-line"></i> 시스템 리포트 센터</h1>
+      <p>실시간 인프라 점검 및 스케줄 보고서 목록입니다.</p>
+    </header>
+
+    <!-- 카드 목록 생성 위치 -->
+    <div id="reportGrid" class="report-grid">
+      <p style="color: var(--text-muted);">리포트 목록을 불러오는 중...</p>
     </div>
-  </header>
+  </div>
 
-  <!-- 메인 컨테이너 -->
-  <main class="container">
-    <!-- 검색 및 필터 바 -->
-    <section class="toolbar">
-      <div class="search-box">
-        <i class="ri-search-line"></i>
-        <input type="text" id="searchInput" placeholder="리포트 제목 또는 작성자 검색...">
-      </div>
-      <div class="stats" id="reportCount">총 0개의 리포트</div>
-    </section>
-
-    <!-- 리포트 카드 목록 -->
-    <section class="report-grid" id="reportGrid"></section>
-  </main>
-
-  <!-- 업로드 모달 -->
-  <div class="modal-backdrop" id="uploadModal">
-    <div class="modal">
+  <!-- 모달 영역 -->
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
       <div class="modal-header">
-        <h3>새 HTML 리포트 업로드</h3>
-        <button class="close-btn" id="closeModalBtn">&times;</button>
+        <button class="btn-newtab" onclick="openInNewTab()"><i class="ri-external-link-line"></i> 새 창으로 보기</button>
+        <button class="btn-close" onclick="closeReportModal()">&times;</button>
       </div>
-      <form id="uploadForm">
-        <div class="form-group">
-          <label for="title">리포트 제목</label>
-          <input type="text" id="title" placeholder="예: 2026년 3분기 인프라 점검 보고서" required>
-        </div>
-        <div class="form-group">
-          <label for="author">작성자</label>
-          <input type="text" id="author" placeholder="작성자 이름" required>
-        </div>
-        <div class="form-group">
-          <label for="description">설명 (선택)</label>
-          <textarea id="description" rows="3" placeholder="리포트에 대한 간단한 설명을 입력하세요."></textarea>
-        </div>
-        <div class="form-group">
-          <label>HTML 파일 선택</label>
-          <div class="file-drop-zone" id="dropZone">
-            <i class="ri-file-code-line"></i>
-            <p>HTML 파일을 클릭하여 선택하거나 여기로 드래그하세요</p>
-            <span class="file-name" id="fileNameDisplay">선택된 파일 없음</span>
-            <input type="file" id="htmlFile" accept=".html,.htm" required hidden>
+      <div class="modal-body">
+        <iframe id="reportIframe" src="about:blank"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       3. 자바스크립트 통합 로직
+       ========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadReports();
+      setupEventListeners();
+    });
+
+    // reports.json을 불러와서 카드 생성
+    async function loadReports() {
+      const container = document.getElementById('reportGrid');
+      if (!container) return;
+
+      try {
+        const response = await fetch('reports.json');
+        if (!response.ok) throw new Error('reports.json 로드 실패');
+        
+        const reports = await response.json();
+        renderReportCards(reports);
+      } catch (error) {
+        console.error('오류 발생:', error);
+        container.innerHTML = `<p class="error-msg">리포트 목록을 불러올 수 없습니다. (reports.json 파일 확인 필요)</p>`;
+      }
+    }
+
+    // 카드 HTML 출력
+    function renderReportCards(reports) {
+      const container = document.getElementById('reportGrid');
+      container.innerHTML = '';
+
+      reports.forEach(report => {
+        const card = document.createElement('div');
+        card.className = 'report-card';
+        card.innerHTML = `
+          <div>
+            <div class="card-header">
+              <span class="card-date">${report.date || ''}</span>
+              <span class="card-author">${report.author || ''}</span>
+            </div>
+            <h3 class="card-title">${report.title}</h3>
+            <p class="card-desc">${report.description || ''}</p>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
-          <button type="submit" class="btn btn-primary">등록하기</button>
-        </div>
-      </form>
-    </div>
-  </div>
+          <div class="card-footer">
+            <button class="btn-view" onclick="openReportModal('${report.fileName}')">
+              <i class="ri-eye-line"></i> 보기
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
 
-  <!-- 리포트 뷰어 모달 -->
-  <div class="modal-backdrop viewer-backdrop" id="viewerModal">
-    <div class="viewer-container">
-      <div class="viewer-header">
-        <div class="viewer-title-info">
-          <h3 id="viewerTitle">리포트 제목</h3>
-          <span class="viewer-meta" id="viewerMeta">작성자 | 날짜</span>
-        </div>
-        <div class="viewer-actions">
-          <button class="btn btn-outline" id="newTabBtn"><i class="ri-open-with-line"></i> 새 창으로 보기</button>
-          <button class="close-btn" id="closeViewerBtn">&times;</button>
-        </div>
-      </div>
-      <div class="viewer-body">
-        <iframe id="reportIframe" title="Report Viewer"></iframe>
-      </div>
-    </div>
-  </div>
+    // 모달 열기
+    function openReportModal(fileName) {
+      const modal = document.getElementById('reportModal');
+      const iframe = document.getElementById('reportIframe');
+      
+      if (modal && iframe) {
+        iframe.src = `reports/${fileName}`;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // 배경 스크롤 막기
+      }
+    }
 
-  <script src="app.js"></script>
+    // 모달 닫기 (X 버튼 및 외부 클릭시)
+    function closeReportModal() {
+      const modal = document.getElementById('reportModal');
+      const iframe = document.getElementById('reportIframe');
+      
+      if (modal) {
+        modal.style.display = 'none';
+        if (iframe) iframe.src = 'about:blank'; // iframe 초기화
+        document.body.style.overflow = ''; // 스크롤 원복
+      }
+    }
+
+    // 새 창에서 열기
+    function openInNewTab() {
+      const iframe = document.getElementById('reportIframe');
+      if (iframe && iframe.src && iframe.src !== 'about:blank') {
+        window.open(iframe.src, '_blank');
+      }
+    }
+
+    // Event Listeners (ESC, 배경 클릭)
+    function setupEventListeners() {
+      const modal = document.getElementById('reportModal');
+
+      // 바깥 검은 배경 클릭 시 닫기
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeReportModal();
+          }
+        });
+      }
+
+      // ESC 키 누르면 닫기
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeReportModal();
+        }
+      });
+    }
+  </script>
 </body>
 </html>
